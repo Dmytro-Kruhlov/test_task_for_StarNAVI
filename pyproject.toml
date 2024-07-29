@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "test-task-for-starnavi"
+version = "0.1.0"
+description = ""
+authors = ["Dmytro-Kruhlov <hazzy1451@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = {extras = ["email"], version = "^2.8.2"}
+pydantic-settings = "^2.3.4"
+fastapi = "^0.111.1"
+sqlalchemy = "^2.0.31"
+psycopg2 = "^2.9.9"
+uvicorn = "^0.30.3"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+fastapi-jwt-auth = "^0.5.0"
+redis = "^5.0.7"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.9"
+alembic = "^1.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

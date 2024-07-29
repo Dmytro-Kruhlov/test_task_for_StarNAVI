@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="executionMode" value="BINARY" />
+    <option name="pathToExecutable" value="C:\Users\PC\AppData\Local\Programs\Python\Python310\Scripts\black.exe" />
+    <option name="sdkUUID" value="9827fd04-5118-4e17-b113-f37689aa31db" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (test_task_for_StarNAVI)" project-jdk-type="Python SDK" />
+</project>
