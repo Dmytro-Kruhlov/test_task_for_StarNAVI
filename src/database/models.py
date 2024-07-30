@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey, DateTime, Interval
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
@@ -16,7 +14,8 @@ class User(Base):
     password = Column(String)
     created_at = Column(DateTime, server_default=func.now())
     auto_reply_enabled = Column(Boolean, default=False)
-    auto_reply_delay = Column(Interval, default=timedelta(hours=1))
+    auto_reply_delay = Column(Integer, default=60)
+    refresh_token = Column(String(255), nullable=True)
 
     posts = relationship("Post", back_populates="owner")
     comments = relationship("Comment", back_populates="author")

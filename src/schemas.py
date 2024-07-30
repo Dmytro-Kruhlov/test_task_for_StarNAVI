@@ -1,5 +1,8 @@
+from typing import List, Optional
+
 from pydantic import BaseModel
-from datetime import datetime, timedelta
+from datetime import datetime
+
 
 
 class UserBase(BaseModel):
@@ -14,9 +17,11 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     created_at: datetime
+    auto_reply_enabled: bool
+    auto_reply_delay: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class PostBase(BaseModel):
@@ -25,19 +30,35 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    auto_reply_enabled: bool = False
-    auto_reply_delay: timedelta = timedelta(hours=1)
+    pass
 
 
-class Post(PostBase):
+class Comment(BaseModel):
     id: int
+    post_id: int
     user_id: int
+    content: str
+    is_blocked: bool
     created_at: datetime
-    auto_reply_enabled: bool
-    auto_reply_delay: timedelta
+    parent_comment: Optional[int]
+    author: User
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class Post(BaseModel):
+    id: int
+    user_id: int
+    title: str
+    content: str
+    created_at: datetime
+    is_blocked: bool
+    owner: User
+    comments: List[Comment] = []
+
+    class Config:
+        from_attributes = True
 
 
 class CommentBase(BaseModel):
@@ -48,18 +69,10 @@ class CommentCreate(CommentBase):
     pass
 
 
-class Comment(CommentBase):
-    id: int
-    post_id: int
-    user_id: int
-    created_at: datetime
-    is_blocked: bool
-
-    class Config:
-        orm_mode = True
-
-
 class TokenModel(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+
+
+
