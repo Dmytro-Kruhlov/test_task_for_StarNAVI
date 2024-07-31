@@ -20,6 +20,11 @@ passlib = "1.7.4"
 python-multipart = "^0.0.9"
 alembic = "^1.13.2"
 bcrypt = "3.2.0"
+google-generativeai = "^0.7.2"
+scheduler = "^0.8.7"
+schedule = "^1.2.2"
+llamaapi = "^0.1.36"
+google-api-python-client = "^2.139.0"
 
 
 [build-system]

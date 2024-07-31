@@ -4,9 +4,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from src.routes import auth, users, posts, comments
 from src.database.db import get_db
+# from src.services.scheduler import run_continuously
 
 app = FastAPI()
-
+# run_continuously()
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")

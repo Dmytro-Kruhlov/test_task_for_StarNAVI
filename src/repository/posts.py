@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session, joinedload
-
+from src.services import google_perspective_api as gpa
 from src import schemas
 from src.database import models
 
 
 async def create_post(db: Session, post: schemas.PostCreate, user_id: int):
     db_post = models.Post(**post.dict(), user_id=user_id)
-    # Добавить логику проверки поста
+    is_toxic = await gpa.analyze_comment_content(db_post.content)
+    if is_toxic:
+        db_post.is_blocked = True
     db.add(db_post)
     db.commit()
     db.refresh(db_post)

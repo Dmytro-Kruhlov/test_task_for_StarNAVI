@@ -16,9 +16,9 @@ class Settings(BaseSettings):
     postgres_user: str = "some_user"
     postgres_password: str = "password"
     postgres_port: int = "8000"
-    cloudinary_name: str = "Cloudinary"
-    cloudinary_api_key: int = "12903053"
-    cloudinary_api_secret: str = "secret"
+    google_api_key: str = "some key"
+    llama_api_key: str = "some key"
+    perspective_api_key: str = "some key"
 
 
 settings = Settings()
