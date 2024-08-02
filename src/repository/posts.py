@@ -1,21 +1,17 @@
 from sqlalchemy.orm import Session, joinedload
-from src.services import google_perspective_api as gpa
 from src import schemas
 from src.database import models
 
 
-async def create_post(db: Session, post: schemas.PostCreate, user_id: int):
-    db_post = models.Post(**post.dict(), user_id=user_id)
-    is_toxic = await gpa.analyze_comment_content(db_post.content)
-    if is_toxic:
-        db_post.is_blocked = True
+async def create_post(db: Session, post: schemas.PostCreate, user_id: int) -> models.Post:
+    db_post = models.Post(**post.model_dump(), user_id=user_id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
     return db_post
 
 
-async def get_posts(db: Session, skip: int = 0, limit: int = 10):
+async def get_posts(db: Session, skip: int = 0, limit: int = 10) -> list[[models.Post]]:
     return (
         db.query(models.Post)
         .options(
@@ -28,7 +24,7 @@ async def get_posts(db: Session, skip: int = 0, limit: int = 10):
     )
 
 
-async def get_post(db: Session, post_id: int):
+async def get_post(db: Session, post_id: int) -> models.Post | None:
     return (
         db.query(models.Post)
         .options(
@@ -38,4 +34,12 @@ async def get_post(db: Session, post_id: int):
         .filter(models.Post.id == post_id)
         .first()
     )
+
+
+async def block_post(db: Session, post_id: int) -> models.Post:
+    post = await get_post(db, post_id)
+    post.is_blocked = True
+    db.commit()
+    db.refresh(post)
+    return post
 

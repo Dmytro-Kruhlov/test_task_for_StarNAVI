@@ -1,5 +1,5 @@
 from datetime import datetime
-from src.services import google_perspective_api as gpa
+
 from sqlalchemy import func, Integer
 from sqlalchemy.orm import Session
 from src import schemas
@@ -7,10 +7,7 @@ from src.database import models
 
 
 async def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, user_id: int):
-    db_comment = models.Comment(**comment.dict(), post_id=post_id, user_id=user_id)
-    is_toxic = await gpa.analyze_comment_content(db_comment.content)
-    if is_toxic:
-        db_comment.is_blocked = True
+    db_comment = models.Comment(**comment.model_dump(), post_id=post_id, user_id=user_id)
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)
@@ -23,6 +20,14 @@ async def get_comments_by_post(db: Session, post_id: int):
 
 async def get_comment(db: Session, comment_id: int):
     return db.query(models.Comment).filter(models.Comment.id == comment_id).first()
+
+
+async def block_comment(db: Session, comment_id: int):
+    comment = await get_comment(db, comment_id)
+    comment.is_blocked = True
+    db.commit()
+    db.refresh(comment)
+    return comment
 
 
 async def get_comments_breakdown(db: Session, date_from: datetime, date_to: datetime):

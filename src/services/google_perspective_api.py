@@ -29,7 +29,7 @@ async def analyze_comment_content(content: str) -> bool:
     try:
         response = analyze_text(content)
         toxicity_score = response['attributeScores']['TOXICITY']['summaryScore']['value']
-        return toxicity_score > 0.7  # Adjust the threshold as needed
+        return toxicity_score > 0.7
     except HttpError as e:
         logging.error(f"Perspective API error: {e}")
-        return False  # If there's an error, we assume the content is not toxic
+        return False

@@ -25,6 +25,10 @@ scheduler = "^0.8.7"
 schedule = "^1.2.2"
 llamaapi = "^0.1.36"
 google-api-python-client = "^2.139.0"
+pytest = "^8.3.2"
+pytest-asyncio = "^0.23.8"
+pytest-mock = "^3.14.0"
+freezegun = "^1.5.1"
 
 
 [build-system]

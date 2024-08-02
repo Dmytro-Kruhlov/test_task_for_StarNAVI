@@ -1,13 +1,12 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-
 
 
 class UserBase(BaseModel):
     username: str
-    email: str
+    email: EmailStr
 
 
 class UserCreate(UserBase):
@@ -20,13 +19,13 @@ class User(UserBase):
     auto_reply_enabled: bool
     auto_reply_delay: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
 class PostBase(BaseModel):
-    title: str
-    content: str
+    title: str = Field(min_length=2)
+    content: str = Field(min_length=5)
 
 
 class PostCreate(PostBase):
@@ -43,7 +42,7 @@ class Comment(BaseModel):
     parent_comment: Optional[int]
     author: User
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
@@ -57,7 +56,7 @@ class Post(BaseModel):
     owner: User
     comments: List[Comment] = []
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
