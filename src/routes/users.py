@@ -19,14 +19,6 @@ async def read_users_me(
     return current_user
 
 
-@router.post("/", response_model=schemas.User)
-async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = repository_users.get_user_by_email(email=user.email, db=db)
-    if db_user:
-        raise HTTPException(status_code=400, detail=messages.EMAIL_ALREADY_EXISTS)
-    return await repository_users.create_user(body=user, db=db)
-
-
 @router.patch("/settings", response_model=schemas.User)
 async def change_user_settings(
     auto_reply: bool,

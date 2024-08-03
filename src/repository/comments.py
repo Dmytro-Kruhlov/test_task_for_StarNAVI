@@ -6,7 +6,7 @@ from src import schemas
 from src.database import models
 
 
-async def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, user_id: int):
+async def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, user_id: int) -> models.Comment:
     db_comment = models.Comment(**comment.model_dump(), post_id=post_id, user_id=user_id)
     db.add(db_comment)
     db.commit()
@@ -14,20 +14,38 @@ async def create_comment(db: Session, comment: schemas.CommentCreate, post_id: i
     return db_comment
 
 
-async def get_comments_by_post(db: Session, post_id: int):
+async def get_comments_by_post(db: Session, post_id: int) -> list[[models.Comment]]:
     return db.query(models.Comment).filter(models.Comment.post_id == post_id).all()
 
 
-async def get_comment(db: Session, comment_id: int):
+async def get_comment(db: Session, comment_id: int) -> models.Comment | None:
     return db.query(models.Comment).filter(models.Comment.id == comment_id).first()
 
 
-async def block_comment(db: Session, comment_id: int):
+async def block_comment(db: Session, comment_id: int) -> models.Comment | None:
     comment = await get_comment(db, comment_id)
-    comment.is_blocked = True
-    db.commit()
-    db.refresh(comment)
+    if comment:
+        comment.is_blocked = True
+        db.commit()
+        db.refresh(comment)
     return comment
+
+
+async def delete_comment(db: Session, comment_id: int) -> models.Comment | None:
+    comment = await get_comment(db, comment_id)
+    if comment:
+        db.delete(comment)
+        db.commit()
+    return comment
+
+
+async def update_comment(db: Session, comment_id: int, comment: schemas.CommentUpdate) -> models.Comment | None:
+    updated_comment = await get_comment(db, comment_id)
+    if updated_comment:
+        updated_comment.content = comment.content
+        db.commit()
+        db.refresh(updated_comment)
+    return updated_comment
 
 
 async def get_comments_breakdown(db: Session, date_from: datetime, date_to: datetime):

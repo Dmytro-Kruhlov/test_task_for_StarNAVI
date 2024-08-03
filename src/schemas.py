@@ -32,6 +32,11 @@ class PostCreate(PostBase):
     pass
 
 
+class PostUpdate(BaseModel):
+    title: str
+    content: str
+
+
 class Comment(BaseModel):
     id: int
     post_id: int
@@ -61,10 +66,14 @@ class Post(BaseModel):
 
 
 class CommentBase(BaseModel):
-    content: str
+    content: str = Field(min_length=2)
 
 
 class CommentCreate(CommentBase):
+    pass
+
+
+class CommentUpdate(CommentBase):
     pass
 
 
