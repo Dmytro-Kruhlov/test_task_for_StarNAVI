@@ -1,4 +1,12 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey, DateTime, Interval
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Boolean,
+    Text,
+    ForeignKey,
+    DateTime,
+)
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
 
@@ -24,29 +32,35 @@ class User(Base):
 class Post(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     title = Column(String, index=True)
     content = Column(Text)
     created_at = Column(DateTime, server_default=func.now())
     is_blocked = Column(Boolean, default=False)
 
     owner = relationship("User", back_populates="posts")
-    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
+    comments = relationship(
+        "Comment", back_populates="post", cascade="all, delete-orphan"
+    )
 
 
 class Comment(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True, index=True)
-    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    post_id = Column(
+        Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     content = Column(Text)
     is_blocked = Column(Boolean, default=False)
     created_at = Column(DateTime, server_default=func.now())
-    parent_comment = Column(Integer, ForeignKey("comments.id", ondelete="CASCADE"), default=None)
+    parent_comment = Column(
+        Integer, ForeignKey("comments.id", ondelete="CASCADE"), default=None
+    )
 
     post = relationship("Post", back_populates="comments")
     author = relationship("User", back_populates="comments")
-
-
-
-

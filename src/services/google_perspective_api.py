@@ -16,8 +16,8 @@ def analyze_text(text: str) -> dict:
     )
 
     analyze_request = {
-        'comment': {'text': text},
-        'requestedAttributes': {'TOXICITY': {}}
+        "comment": {"text": text},
+        "requestedAttributes": {"TOXICITY": {}},
     }
 
     response = client.comments().analyze(body=analyze_request).execute()
@@ -28,7 +28,9 @@ def analyze_text(text: str) -> dict:
 async def analyze_comment_content(content: str) -> bool:
     try:
         response = analyze_text(content)
-        toxicity_score = response['attributeScores']['TOXICITY']['summaryScore']['value']
+        toxicity_score = response["attributeScores"]["TOXICITY"]["summaryScore"][
+            "value"
+        ]
         return toxicity_score > 0.7
     except HttpError as e:
         logging.error(f"Perspective API error: {e}")

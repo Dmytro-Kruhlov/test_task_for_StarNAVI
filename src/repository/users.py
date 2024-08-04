@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Type
 from sqlalchemy.orm import Session
 from src.database import models
@@ -38,10 +37,11 @@ async def update_token(user: models.User, refresh_token, db: Session) -> None:
     db.refresh(user)
 
 
-async def update_settings(user: models.User, auto_reply: bool, auto_reply_delay: int, db: Session):
+async def update_settings(
+    user: models.User, auto_reply: bool, auto_reply_delay: int, db: Session
+):
     user.auto_reply_enabled = auto_reply
     user.auto_reply_delay = auto_reply_delay
     db.commit()
     db.refresh(user)
     return user
-

@@ -3,7 +3,9 @@ from src import schemas
 from src.database import models
 
 
-async def create_post(db: Session, post: schemas.PostCreate, user_id: int) -> models.Post:
+async def create_post(
+    db: Session, post: schemas.PostCreate, user_id: int
+) -> models.Post:
     db_post = models.Post(**post.model_dump(), user_id=user_id)
     db.add(db_post)
     db.commit()
@@ -16,7 +18,7 @@ async def get_posts(db: Session, skip: int = 0, limit: int = 10) -> list[[models
         db.query(models.Post)
         .options(
             joinedload(models.Post.comments).joinedload(models.Comment.author),
-            joinedload(models.Post.owner)
+            joinedload(models.Post.owner),
         )
         .offset(skip)
         .limit(limit)
@@ -29,7 +31,7 @@ async def get_post(db: Session, post_id: int) -> models.Post | None:
         db.query(models.Post)
         .options(
             joinedload(models.Post.comments).joinedload(models.Comment.author),
-            joinedload(models.Post.owner)
+            joinedload(models.Post.owner),
         )
         .filter(models.Post.id == post_id)
         .first()
@@ -53,7 +55,9 @@ async def delete_post(db: Session, post_id: int) -> models.Post | None:
     return post
 
 
-async def update_post(db: Session, post_id: int, post: schemas.PostCreate) -> models.Post | None:
+async def update_post(
+    db: Session, post_id: int, post: schemas.PostCreate
+) -> models.Post | None:
     updated_post = await get_post(db, post_id)
     if updated_post:
         if post.title:

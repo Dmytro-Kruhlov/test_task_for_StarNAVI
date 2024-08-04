@@ -1,16 +1,45 @@
 version: '3.8'
+
 services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+
   redis:
     image: redis:6
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
-  postgres:
-    image: postgres:13
+
+  web:
+    build: .
+#    command: poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --loop asyncio
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      SQLALCHEMY_DATABASE_URL: ${SQLALCHEMY_DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      LLAMA_API_KEY: ${LLAMA_API_KEY}
+      PERSPECTIVE_API_KEY: ${PERSPECTIVE_API_KEY}
+
+volumes:
+  postgres-data:
