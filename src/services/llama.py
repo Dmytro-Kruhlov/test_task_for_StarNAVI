@@ -14,7 +14,7 @@ async def generate_reply(post_text, comment_text, user_name):
                 "content": (
                     f"Post by {user_name}: {post_text}\n"
                     f"Comment: {comment_text}\n"
-                    "Reply as the author of the post, ensuring the reply is relevant to both the post and the comment."
+                    "Reply as the author of the post, ensuring the reply is relevant to both the post and the comment. Use no more than 2 sentences"
                 ),
             },
         ],
