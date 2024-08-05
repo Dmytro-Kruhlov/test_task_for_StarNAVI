@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     postgres_user: str = "some_user"
     postgres_password: str = "password"
     postgres_port: int = "8000"
-    google_api_key: str = "some key"
     llama_api_key: str = "some key"
     perspective_api_key: str = "some key"
 
